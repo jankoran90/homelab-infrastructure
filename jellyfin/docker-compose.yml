@@ -1,0 +1,16 @@
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    ports:
+      - '8096:8096'
+    volumes:
+      - ./config:/config
+      - ./cache:/cache
+      - ~/mediastack/media:/media:ro
+      - /root/mediastack/media/realdebrid:/data/realdebrid:ro,rshared
+      - /mnt/data/venue_disk_f:/dell_venue:ro,rshared
+      # ro = read-only (ochrana proti smazani dat zevnitr kontejneru)
+      # rshared (recursive shared) = nutne pro rclone/sshfs mounty. 
+      # Zajisti, ze kdyz se mount na serveru odpoji a znovu pripoji, kontejner zmeny ihned uvidi bez nutnosti restartu.
